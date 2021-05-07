@@ -106,10 +106,10 @@ def slide(row, dir):
     zeros = [0 for n in range(cols-len(new_row))]
 
     #Adding the zeros according to the direction
+    new_row = zeros+new_row
+
     if dir == -1:
-        new_row += zeros
-    if dir == 1:
-        new_row = zeros+new_row
+        new_row.reverse()
 
     return new_row
 
@@ -242,14 +242,18 @@ def main():
         #Checks if the game is over
         game_over = check(board)
 
-def lost_screen():
+    return score
+
+def lost_screen(score):
     #Renders 'You lost!' for 1 second
     n = 0
-    while n < 1000:
+    while n < 3000:
         font = pygame.font.SysFont('arial', 60)
         screen.fill((22, 19, 35))
         label = font.render('You Lost!', 1, (254, 254, 215))
+        score_label = font.render(f'Your score was {score}.', 1, (254, 254, 215))
         screen.blit(label, (width/2-label.get_width()/2, height/2-label.get_height()/2))
+        screen.blit(score_label, (width/2-score_label.get_width()/2, height/2-label.get_height()+score_label.get_height()+40))
         pygame.display.update()
         n += 1
 
@@ -262,10 +266,10 @@ def main_menu():
                 sys.exit()
             #Runs the game when any key is pressed
             if event.type == pygame.KEYDOWN:
-                main()
+                score = main()
 
                 #If the main function is over, that means the game is over, so show the lost screen
-                lost_screen()
+                lost_screen(score)
 
         #Renders 'Press any key to play...'
         screen.fill((22, 19, 35))
